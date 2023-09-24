@@ -1,0 +1,82 @@
+{
+    "products": [
+        {
+            "id": "5ab40c8e-b79e-4d6b-a1a8-868a62f6dde0",
+            "name": "T-Shirt",
+            "stock": [
+                {
+                    "size": "S",
+                    "quantity": 10,
+                    "price": 20
+                },
+                {
+                    "size": "M",
+                    "quantity": 10,
+                    "price": 20
+                },
+                {
+                    "size": "L",
+                    "quantity": 10,
+                    "price": 20
+                },
+                {
+                    "size": "XL",
+                    "quantity": 10,
+                    "price": 20
+                }
+            ]
+        },
+        {
+            "id": "8383c27c-54c2-46c6-b9ad-a26b7985a25a",
+            "name": "Jeans",
+            "stock": [
+                {
+                    "size": "S",
+                    "quantity": 10,
+                    "price": 20
+                },
+                {
+                    "size": "M",
+                    "quantity": 10,
+                    "price": 20
+                },
+                {
+                    "size": "L",
+                    "quantity": 10,
+                    "price": 20
+                },
+                {
+                    "size": "XL",
+                    "quantity": 10,
+                    "price": 20
+                }
+            ]
+        },
+        {
+            "id": "76601e08-3c5f-4df5-bf71-150dcf7e57bc",
+            "name": "Shirt",
+            "stock": [
+                {
+                    "size": "S",
+                    "quantity": 10,
+                    "price": 20
+                },
+                {
+                    "size": "M",
+                    "quantity": 10,
+                    "price": 20
+                },
+                {
+                    "size": "L",
+                    "quantity": 10,
+                    "price": 20
+                },
+                {
+                    "size": "XL",
+                    "quantity": 10,
+                    "price": 20
+                }
+            ]
+        }
+    ]
+}
