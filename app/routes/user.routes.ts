@@ -15,4 +15,4 @@ router
 	.route("/get_lowest_price")
 	.get(validate(userValidation.userRequest), getLowestPrice);
 
-module.exports = router;
+export default router;

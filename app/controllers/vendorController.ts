@@ -6,7 +6,6 @@ import { Product, Stock, UpdateRequestObject } from "../interfaces/interface";
 const dbPath = path.join(__dirname, "..", "..", "db", "db.json");
 
 export async function getData(_req: Request, res: Response) {
-	console.log(dbPath);
 	const data = await readFile(dbPath, "utf-8");
 	return res.status(201).json(JSON.parse(data));
 }

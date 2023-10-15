@@ -1,0 +1,10 @@
+{
+	"development": {
+		"username": "postgres",
+		"password": "J_?YN#fX8T52$bK",
+		"database": "postgres",
+		"host": "db.tvhwesawjyluqpcukdmy.supabase.co",
+		"dialect": "postgres",
+		"port": 6543
+	}
+}
