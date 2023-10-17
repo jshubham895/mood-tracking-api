@@ -1,37 +1,26 @@
 import { DataTypes, Sequelize } from "sequelize";
-// import User from "./models/User";
-import { UUIDV4 } from "sequelize";
+import { initUserModel } from "./app/models/User.model";
+import { initMoodLogModel } from "./app/models/MoodLog.model";
+import dotenv from "dotenv";
+dotenv.config();
 
 const sequelize = new Sequelize({
-	host: "db.tvhwesawjyluqpcukdmy.supabase.co",
-	database: "postgres",
-	username: "postgres",
-	password: "J_?YN#fX8T52$bK",
+	host: process.env.DB_HOST as string,
+	database: process.env.DB_DATABASE as string,
+	username: process.env.DB_USERNAME as string,
+	password: process.env.DB_PASSWORD as string,
+	port: process.env.DB_PORT as undefined,
 	dialect: "postgres"
 });
 
-sequelize.define("User", {
-	id: {
-		type: DataTypes.UUID,
-		defaultValue: UUIDV4,
-		primaryKey: true
-	},
-	name: {
-		type: DataTypes.STRING,
+export const User = initUserModel(sequelize);
+export const MoodLog = initMoodLogModel(sequelize);
+
+User.hasMany(MoodLog, {
+	foreignKey: {
 		allowNull: false
-	},
-	email: {
-		type: DataTypes.STRING,
-		allowNull: false
-	},
-	password: {
-		type: DataTypes.STRING,
-		allowNull: false
-	},
-	isSharable: {
-		type: DataTypes.BOOLEAN,
-		defaultValue: false
 	}
 });
+MoodLog.belongsTo(User);
 
 export default sequelize;

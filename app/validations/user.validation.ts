@@ -2,19 +2,17 @@ import validation from "./common.validation";
 import Joi from "joi";
 
 export default {
-	userRequest: {
+	signup: {
 		body: Joi.object({
-			items: validation.arrayRequired.items(
-				Joi.object({
-					id: validation.stringRequired,
-					stock: validation.arrayRequired.items(
-						Joi.object({
-							size: Joi.string().valid("S", "M", "L", "XL"),
-							quantity: validation.positiveIntegerRequired
-						})
-					)
-				})
-			)
+			name: validation.stringRequired,
+			email: validation.emailRequired,
+			password: validation.stringRequired
+		})
+	},
+	login: {
+		body: Joi.object({
+			email: validation.emailRequired,
+			password: validation.stringRequired
 		})
 	}
 };

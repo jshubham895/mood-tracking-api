@@ -1,4 +1,4 @@
-import sequelize from "./db";
+import sequelize from "../../db";
 
 export const getConnection = async () => {
 	try {
@@ -13,6 +13,7 @@ export const syncDatabase = async () => {
 	try {
 		await getConnection();
 		await sequelize.sync({ alter: true });
+		console.log(sequelize.models);
 		console.log("Synchronized with database successfully.");
 	} catch (error) {
 		console.log("Error while syncing database ", error);

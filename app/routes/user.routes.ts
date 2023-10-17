@@ -1,18 +1,13 @@
 import { Router } from "express";
 import { validate } from "express-validation";
-import {
-	checkProductAvailability,
-	getLowestPrice
-} from "../controllers/userController";
-const router = Router();
+import { loginUser, signUp } from "../controllers/userController";
 import userValidation from "../validations/user.validation";
+import validateToken from "../middlewares/authMiddleware";
 
-router
-	.route("/check_availability")
-	.get(validate(userValidation.userRequest), checkProductAvailability);
+const router = Router();
 
-router
-	.route("/get_lowest_price")
-	.get(validate(userValidation.userRequest), getLowestPrice);
+router.route("/login").post(validate(userValidation.login), loginUser);
+
+router.route("/signup").post(validate(userValidation.signup), signUp);
 
 export default router;

@@ -12,5 +12,10 @@ export default {
 	positiveNumberRequired: Joi.number().positive().required(),
 	positiveNumberOptional: Joi.number().positive().optional(),
 	positiveIntegerOptional: Joi.number().integer().optional(),
-	positiveIntegerRequired: Joi.number().integer().optional()
+	positiveIntegerRequired: Joi.number().integer().optional(),
+	emailRequired: Joi.string().email().required(),
+	uuidRequired: Joi.string()
+		.guid({ version: ["uuidv4"] })
+		.required(),
+	booleanOptional: Joi.boolean().optional()
 };

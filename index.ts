@@ -1,14 +1,26 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { closeDatabaseConnection, syncDatabase } from "./dbService";
+import {
+	closeDatabaseConnection,
+	syncDatabase
+} from "./app/services/dbService";
+import appRoutes from "./app/routes/approutes";
+import dotenv from "dotenv";
+import validationErrorHandler from "./app/middlewares/expressValidation";
+import EmojiService from "./app/services/emojiService";
+dotenv.config();
+
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(bodyParser.json());
 
-(async () => await syncDatabase())();
+app.use("/api", appRoutes);
 
-app.listen(3000, () => {
+app.use(validationErrorHandler);
+
+app.listen(3000, async () => {
+	await syncDatabase();
 	console.log("Server started successfully.");
 });
 

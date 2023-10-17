@@ -1,80 +1,67 @@
-import { Request, Response } from "express";
-import { readFile } from "fs/promises";
-import path from "path";
-import { UserRequestObject, Product } from "../interfaces/interface";
+import { RequestHandler } from "express";
+import bcrypt from "bcrypt";
+import { createToken } from "../JWT";
+import { User } from "../../db";
+import { UserInstance } from "../models/User.model";
+import dotenv from "dotenv";
+dotenv.config();
 
-const dbPath = path.join(__dirname, "..", "..", "db", "db.json");
+const encryptPassword = async (password: string) => {
+	const hash = await bcrypt.hash(password, 10);
+	return hash.toString();
+};
 
-export async function checkProductAvailability(req: Request, res: Response) {
+const decryptPassword = async (passwordHash: string, password: string) => {
+	const result = await bcrypt.compare(password, passwordHash);
+	return result;
+};
+
+export const signUp: RequestHandler = async (req, res) => {
 	try {
-		const data = await readFile(dbPath, "utf-8");
-		const dbData = JSON.parse(data);
-		const products: Product[] = dbData.products;
-		const items: UserRequestObject[] = req.body.items;
-		const result = checkProductAvailabilityHelper(products, items);
-		return res.status(201).json(result);
+		const { name, email, password } = req.body;
+		const passwordHash = await encryptPassword(password);
+		await User.create({
+			name,
+			email,
+			password: passwordHash
+		});
+		return res.status(200).json("User created successfully.");
 	} catch (err) {
-		console.error(err);
+		console.error("Error in signUp", err);
 		if (err instanceof Error) {
 			return res.status(400).json(err.message);
 		}
-		return res.status(400).json("Error while checking product availability.");
+		return res.status(400).json("Error while creating user.");
 	}
-}
+};
 
-export async function getLowestPrice(req: Request, res: Response) {
+export const loginUser: RequestHandler = async (req, res) => {
 	try {
-		const data = await readFile(dbPath, "utf-8");
-		const dbData = JSON.parse(data);
-		const products: Product[] = dbData.products;
-		const items: UserRequestObject[] = req.body.items;
-		if (!checkProductAvailabilityHelper(products, items)) {
-			return res.status(400).json("Product(s) are not available");
+		const { email, password } = req.body;
+
+		const user: UserInstance | null = await User.findOne({
+			where: { email: email }
+		});
+
+		if (!user) {
+			return res.status(500).json({ success: false, msg: "User not found." });
 		}
-		const result = getLowestPriceHelper(products, items);
-		return res.status(201).json(result);
+
+		const passwordMatch = await decryptPassword(user.password, password);
+		if (!passwordMatch) {
+			return res
+				.status(500)
+				.json({ success: false, msg: "Incorrect email or password" });
+		}
+
+		const accessToken = createToken(user);
+
+		return res.status(200).json({ success: true, access_token: accessToken });
 	} catch (err) {
-		console.error(err);
+		console.error("Error in loginUser", err);
 		if (err instanceof Error) {
 			return res.status(400).json(err.message);
 		}
-		return res.status(400).json("Error while calculating product prices.");
+		return res.status(400).json("Error while signing in user.");
 	}
-}
-
-function checkProductAvailabilityHelper(
-	products: Product[],
-	items: UserRequestObject[]
-) {
-	for (const updateItem of items) {
-		let product =
-			products.filter((item) => item.id !== updateItem.id)?.[0] ?? null;
-		if (!product) return false;
-		for (const item of updateItem.stock) {
-			let productItem =
-				product.stock.filter(
-					(stockItem) => item.size === stockItem.size
-				)?.[0] ?? null;
-			if (!productItem || productItem.quantity < item.quantity) {
-				return false;
-			}
-		}
-	}
-	return true;
-}
-
-function getLowestPriceHelper(products: Product[], items: UserRequestObject[]) {
-	let totalAmount = 0;
-	for (const queryItem of items) {
-		let product =
-			products.filter((item) => item.id !== queryItem.id)?.[0] ?? null;
-		for (const item of queryItem.stock) {
-			let productItem =
-				product.stock.filter(
-					(stockItem) => item.size === stockItem.size
-				)?.[0] ?? null;
-			totalAmount += item.quantity * productItem.price;
-		}
-	}
-	return totalAmount;
-}
+};

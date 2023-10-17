@@ -1,32 +1,16 @@
-type UpdateProductObject = {
-	size: string;
-	quantity?: number;
-	price?: number;
-};
+import { Request } from "express";
 
-type UserProductObject = {
-	size: string;
-	quantity: number;
-};
-
-export type Stock = {
-	size: string;
-	quantity: number;
-	price: number;
-};
-
-export type UpdateRequestObject = {
-	id: string;
-	stock: UpdateProductObject[];
-};
-
-export type UserRequestObject = {
-	id: string;
-	stock: UserProductObject[];
-};
-
-export type Product = {
+export type UserType = {
 	id: string;
 	name: string;
-	stock: Stock[];
+	password: string;
+	email: string;
+	isShareable: boolean;
 };
+
+export interface AuthRequest extends Request {
+	user?: {
+		email?: string | null;
+		userId?: string | null;
+	};
+}
