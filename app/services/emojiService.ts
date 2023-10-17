@@ -8,10 +8,6 @@ class EmojiService {
 		this.emojiData = JSON.parse(rawData);
 	}
 
-	findKeywordsByEmoji(emoji: string): string[] | undefined {
-		return this.emojiData[emoji];
-	}
-
 	findEmojisByKeyword(keyword: string): string[] {
 		const emojis: string[] = [];
 		for (const [emoji, keywords] of Object.entries(this.emojiData)) {
