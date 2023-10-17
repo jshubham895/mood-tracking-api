@@ -1,4 +1,4 @@
-External Libraries:
+----------- External Libraries -----------------
 
 body-parser: for parsing the body data from the API
 
@@ -21,3 +21,11 @@ luxon, moment: Date and time manipulation library
 sentiment: For creating data insights from the message
 
 pg, pg-hstore: Postgres database
+
+
+--------------- Steps for running the application --------------------------------
+
+1. Clone the repository
+2. Copy .env provided in the email attachment in the root of the repository
+3. npm i
+4. npm run start
